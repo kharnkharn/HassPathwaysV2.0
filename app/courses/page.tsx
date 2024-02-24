@@ -55,6 +55,16 @@ const MyCourses = () => {
       </header>
       <section>
         <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
+          <AddCourseButton
+            label={"Add Course"}
+            clickCallback={() => {
+              addElementToArray({
+                tag: 'CHEM',
+                courseCode: 'CHEM-1100',
+                title: 'Intro to Chemistry',
+              })
+            }}
+          />
           <ModeRadioButton
             checked={0 === courseFilter}
             label={"All"}
@@ -81,13 +91,46 @@ const MyCourses = () => {
       <section className="my-4 grid grid-flow-row gap-y-3">
         {currentCourses.map((element: coursesType, index: number) => (
           <li key={index}>
-            <CourseCard tag={[element.tag]} courseCode={element.courseCode} title={element.title} />
+            <CourseCard tag={[element.tag]} courseCode={element.courseCode} title={element.title} 
+            deleteCard={()=>{
+              const newArray = currentCourses.filter((_, id) => id !== index);
+
+              setCurrentCourses(newArray);
+
+            }}/>
           </li>
         ))}
         {/*<CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
         <CourseCard tag={["CSCI"]} courseCode="CSCI-1200" title="Data Structures" />*/}
       </section>
     </>
+  );
+};
+
+const AddCourseButton = ({
+  label,
+  clickCallback,
+}: {
+  label: string;
+  clickCallback: MouseEventHandler;
+}) => {
+  const tagStyle = "tag-primary";
+
+  const fontStyle = "text-primary-700";
+
+  return (
+    <button
+      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${
+        " !bg-gray-50"
+      }`}
+      onClick={clickCallback}
+    >
+      <span
+        className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}
+      >
+        {label}
+      </span>
+    </button>
   );
 };
 
