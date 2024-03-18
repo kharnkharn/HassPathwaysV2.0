@@ -9,6 +9,7 @@ type coursesType = {
   tag: string;
   courseCode: string;
   title: string;
+  state: number,
 };
 
 const MyCourses = () => {
@@ -33,36 +34,33 @@ const MyCourses = () => {
       tag: 'CSCI',
       courseCode: 'CSCI-2400',
       title: 'Comp Organization',
+      state:0,
     })
     
     addElementToArray({
       tag: 'MATH',
       courseCode: 'MATH-1100',
       title: 'Calculus 1',
+      state:1,
     })
     
     addElementToArray({
       tag: 'CHEM',
       courseCode: 'CHEM-1100',
       title: 'Intro to Chemistry',
+      state:1,
     })
   }, []);
-
   return (
     <>
       <header className="mb-4 md:mb-8">
-        <h1 className="title">My Courses</h1>
+        <h1 className="title">{courseFilter}</h1>
       </header>
       <section>
         <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
           <AddCourseButton
             label={"Add Course"}
             clickCallback={() => {
-              addElementToArray({
-                tag: 'CHEM',
-                courseCode: 'CHEM-1100',
-                title: 'Intro to Chemistry',
-              })
             }}
           />
           <ModeRadioButton
@@ -91,13 +89,15 @@ const MyCourses = () => {
       <section className="my-4 grid grid-flow-row gap-y-3">
         {currentCourses.map((element: coursesType, index: number) => (
           <li key={index}>
-            <CourseCard tag={[element.tag]} courseCode={element.courseCode} title={element.title} 
-            deleteCard={()=>{
-              const newArray = currentCourses.filter((_, id) => id !== index);
+            {(courseFilter==0||element.state==courseFilter)&&(
+              <CourseCard tag={[element.tag]} courseCode={element.courseCode} title={element.title} 
+              deleteCard={()=>{
+                const newArray = currentCourses.filter((_, id) => id !== index);
 
-              setCurrentCourses(newArray);
+                setCurrentCourses(newArray);
 
-            }}/>
+              }}/>
+            )}
           </li>
         ))}
         {/*<CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
